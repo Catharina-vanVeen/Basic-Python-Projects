@@ -1,3 +1,6 @@
+#
+# author    Maria Catharina van Veen
+#
 
 import sqlite3
 
