@@ -13,3 +13,4 @@ class Student(Person):
 
 class Teacher(Person):
     subjects = ""
+    payGrade = 0
