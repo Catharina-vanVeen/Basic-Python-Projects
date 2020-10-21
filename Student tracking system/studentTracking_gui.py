@@ -85,7 +85,7 @@ def loadGui(window):
 def loadCoursesGui(window):
 
     # Labels
-    window.lbl_shortName = tk.Label(window, text = "Course Short Name:", bg = "#005500", fg = "white")
+    window.lbl_shortName = tk.Label(window, text = "Course Abbreviation:", bg = "#005500", fg = "white")
     window.lbl_shortName.grid(row = 0, column = 0, rowspan = 1, columnspan = 1, padx = (20, 0), pady = (10, 0), sticky = W)
     window.lbl_longName = tk.Label(window, text = "Course Long Name:", bg = "#005500", fg = "white")
     window.lbl_longName.grid(row = 2, column = 0, rowspan = 1, columnspan = 1, padx = (20, 0), pady = (10, 0), sticky = W)

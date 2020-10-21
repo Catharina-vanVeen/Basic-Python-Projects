@@ -40,4 +40,3 @@ if __name__ == "__main__":
     app = MainWindow(root)
     root.mainloop()
 
-# don't open courses window if already open
