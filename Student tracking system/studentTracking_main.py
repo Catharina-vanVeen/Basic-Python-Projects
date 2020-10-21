@@ -26,16 +26,12 @@ class MainWindow(Frame):
     def __init__(self, root):
         Frame.__init__(self, root)
         self.root = root
-        self.root.minsize(600, 500)
-        self.root.maxsize(600, 500)
-        self.root.geometry(func.windowCenter(self, 600, 500))
+        self.root.geometry(func.windowCenter(self, 700, 450))
         self.root.title("Student Tracking App")
         self.root.config(bg = "#005500")
-        gui.loadGui(self)
         func.createDB()
-        func.showList(self)
-
-
+        gui.loadGui(self)
+        
 
 
 
@@ -44,8 +40,4 @@ if __name__ == "__main__":
     app = MainWindow(root)
     root.mainloop()
 
-# TODO
-# if duplicate name added to db check if they want that or want to update
-# add scroll bar to listbox
-# select for courses
-# quit function
+# don't open courses window if already open
