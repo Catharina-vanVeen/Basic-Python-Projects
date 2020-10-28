@@ -13,7 +13,7 @@ class MainWindow(Frame):
         Frame.__init__(self, root)
         self.root = root
         self.root.title("Web Page Generator")
-        self.root.bgcolor = "#550000"
+        self.root.bgcolor = "#AA0000"
         self.root.config(bg = self.root.bgcolor)
         gui.loadGUI(self)
 

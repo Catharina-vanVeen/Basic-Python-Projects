@@ -1,3 +1,4 @@
+#!/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
 
 import os
 from tkinter import *
@@ -43,12 +44,20 @@ def launch(window):
         window.header.ent_fileName.insert(0, fileName)
         if not messagebox.askokcancel("File name extension", "The file name should end in '.html'. Do you accept {} as your filename?".format(fileName)):
             return
-    filePath = "{}\{}".format(fileFolder, fileName)
+    #filePath = "{}\{}".format(fileFolder, fileName)
+    #filePath = fileFolder+os.sep+fileName
+    #filePath = "{}{}{}".format(fileFolder, os.sep, fileName)
+    filePath = "{}/{}".format(fileFolder, fileName)
+    sys.stdout.write("writing to "+filePath)
+    sys.stdout.write("fileHead:"+fileHead)
+    sys.stdout.write("fileBody:"+fileBody)
+    sys.stdout.write("fileTail:"+fileTail)
+    sys.stdout.flush()
     file = open(filePath, "w")
     file.write(fileHead + fileBody + fileTail)
     file.close()
         
-    webbrowser.open(filePath, new=1, autoraise=True)
+    webbrowser.open("file://"+filePath, new=1, autoraise=True)
 
 
 def load(window):
