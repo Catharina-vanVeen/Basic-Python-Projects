@@ -1,7 +1,6 @@
 from django.db import models
-from django.db.models import *
+from django.db.models import DateField
 import datetime
-from datetime import date
 
 # Create your models here.
 class Account(models.Model):
@@ -15,8 +14,8 @@ class Account(models.Model):
         return "{:09}\t{}, {}".format(self.pk, self.lastName, self.firstName)
 
 TYPE_CHOICES = {
-    ('D', 'deposit'),
-    ('W', 'withdrawl'),
+    ('Deposit', 'deposit'),
+    ('Withdrawl', 'withdrawl'),
 }
 
 class Transaction(models.Model):
@@ -29,4 +28,4 @@ class Transaction(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return "{:09}\t{}\t{}".format(self.pk, self.date, self.account)
+        return "{} {} {}".format(self.date, self.type, self.account)
