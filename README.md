@@ -19,4 +19,4 @@
 
 
 <h3 id="dcb">Django_Checkbook</h3>
-<p>This project uses the <string>django framework</strong>. The project allows the user to maintain several bank accounts. The user can create accounts and add transactions. The user can see statements with balance and transactions. </p>
+<p>This project uses the <strong>django framework</strong>. The project allows the user to maintain several bank accounts. The user can create accounts and add transactions. The user can see statements with balance and transactions. </p>
