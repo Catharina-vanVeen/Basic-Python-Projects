@@ -1,3 +1,15 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# Python version    3.8.5
+#
+# Author            Maria Catharina van Veen
+#
+# Purpose           To provide users with a tool to create
+#                   or edit an html file.
+#
+# Tested OS         This code was written and tested to
+#                   work with Windows 10.
 
 
 import os
@@ -16,10 +28,6 @@ class MainWindow(Frame):
         self.root.bgcolor = "#AA0000"
         self.root.config(bg = self.root.bgcolor)
         gui.loadGUI(self)
-
-
-
-
 
 
 if __name__ == "__main__":
