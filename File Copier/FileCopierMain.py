@@ -1,3 +1,17 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# Python version    3.8.5
+#
+# Author            Maria Catharina van Veen
+#
+# Purpose           To make copies of all .txt files that
+#                   were modified within the last 24 hours
+#                   from one chosen directory to another.
+#
+# Tested OS         This code was written and tested to
+#                   work with Windows 10.
+
 import shutil
 import os
 import datetime
@@ -18,14 +32,6 @@ class MainWindow(Frame):
         self.root.bgcolor = "#000055"
         self.root.config(bg = self.root.bgcolor)
         gui.loadGUI(self)
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":

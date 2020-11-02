@@ -13,7 +13,7 @@
 #                   work with Windows 10.
 
 
-# imports
+
 import os
 from tkinter import *
 import tkinter as tk

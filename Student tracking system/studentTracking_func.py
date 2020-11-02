@@ -21,6 +21,7 @@ def createDB():
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("CREATE TABLE IF NOT EXISTS tbl_courses( \
             courses_id INTEGER PRIMARY KEY AUTOINCREMENT, \
             courses_shortName TEXT UNIQUE, \
@@ -49,7 +50,8 @@ def createDB():
             students_lname TEXT COLLATE NOCASE, \
             students_phone TEXT, \
             students_email TEXT COLLATE NOCASE, \
-            students_course TEXT COLLATE NOCASE\
+            students_course TEXT COLLATE NOCASE, \
+            FOREIGN KEY (students_course) References tbl_courses(courses_longName)\
             );")
         conn.commit()
     conn.close()
@@ -59,7 +61,6 @@ def createDB():
 # Functions related to Main GUI
 
 def add(window):
-    print("Add is running")
     studentID = window.txt_id.get().strip()
     fname = window.txt_fname.get().strip().title()
     lname = window.txt_lname.get().strip()
@@ -84,11 +85,14 @@ def add(window):
             return
     if course == "":
         confirm = messagebox.askokcancel("No course provided", "You have not provided the current course for the student.\n\nAre you sure you want to continue?")
-        if not confirm:
+        if confirm:
+            course = None
+        else:
             return
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("INSERT INTO tbl_students \
             (students_fname, students_lname, students_phone, students_email, students_course) \
             VALUES (?, ?, ?, ?, ?);", (fname, lname, phone, email, course))
@@ -107,7 +111,6 @@ def clear(window):
         window.opt_course_var.set("")
         
 def delete(window):
-    print("Delete is running")
     studentID = window.txt_id.get()
     fname = window.txt_fname.get()
     lname = window.txt_lname.get()
@@ -135,6 +138,7 @@ def delete(window):
         conn = sqlite3.connect('db_students.db')
         with conn:
             cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON;")
             cursor.execute("SELECT COUNT(*) FROM tbl_students WHERE {}".format(WHERE))
             count = cursor.fetchone()[0]
             print(count)
@@ -151,7 +155,6 @@ def delete(window):
       
 
 def filter(window):
-    print("Filter is running")
     studentID = window.txt_id.get().strip()
     fname = window.txt_fname.get().strip().title()
     lname = window.txt_lname.get().strip()
@@ -173,7 +176,6 @@ def filter(window):
         WHERE = "students_id = {}".format(studentID)
     if WHERE.endswith("and "):
         WHERE = WHERE[:-4]
-    print(WHERE)
     if WHERE == "":
         showList(window)
     else:
@@ -181,54 +183,53 @@ def filter(window):
         conn = sqlite3.connect("db_students.db")
         with conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM tbl_students INNER JOIN tbl_courses ON courses_longName = students_course WHERE {} ORDER BY students_lname COLLATE NOCASE".format(WHERE))
+            cursor.execute("PRAGMA foreign_keys = ON;")
+            cursor.execute("SELECT * FROM tbl_students LEFT OUTER JOIN tbl_courses ON courses_longName = students_course WHERE {} ORDER BY students_lname, students_fname COLLATE NOCASE".format(WHERE))
             studentList = cursor.fetchall()
-            print(len(studentList))
             for student in studentList:
                 fullname = "{}, {}".format(student[2], student[1])[0:24]
                 window.lst_list.insert(END, "{:03d} {:25} {}".format(student[0], fullname, student[7]))
     
 def select(window, event):
     w = event.widget
-    index = int(w.curselection()[0])
-    value = w.get(index)
-    print(value)
-    studentID = int(value.split()[0])
-    print(studentID)
-    conn = sqlite3.connect("db_students.db")
-    with conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM tbl_students WHERE students_id = {}".format(studentID))
-        studentInfo = cursor.fetchone()
-        print(studentInfo)
-    conn.close()
-    window.txt_id.delete(0, END)
-    window.txt_id.insert(0, studentInfo[0])
-    window.txt_fname.delete(0, END)
-    window.txt_fname.insert(0, studentInfo[1])
-    window.txt_lname.delete(0, END)
-    window.txt_lname.insert(0, studentInfo[2])
-    window.txt_phone.delete(0, END)
-    window.txt_phone.insert(0, studentInfo[3])
-    window.txt_email.delete(0, END)
-    window.txt_email.insert(0, studentInfo[4])
-    window.opt_course_var.set(studentInfo[5])
+    try:
+        index = int(w.curselection()[0])
+        value = w.get(index)
+        studentID = int(value.split()[0])
+        conn = sqlite3.connect("db_students.db")
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON;")
+            cursor.execute("SELECT * FROM tbl_students WHERE students_id = {}".format(studentID))
+            studentInfo = cursor.fetchone()
+        conn.close()
+        window.txt_id.delete(0, END)
+        window.txt_id.insert(0, studentInfo[0])
+        window.txt_fname.delete(0, END)
+        window.txt_fname.insert(0, studentInfo[1])
+        window.txt_lname.delete(0, END)
+        window.txt_lname.insert(0, studentInfo[2])
+        window.txt_phone.delete(0, END)
+        window.txt_phone.insert(0, studentInfo[3])
+        window.txt_email.delete(0, END)
+        window.txt_email.insert(0, studentInfo[4])
+        window.opt_course_var.set(studentInfo[5])
+    except:
+        pass
 
 def showList(window):
     window.lst_list.delete(0, END)
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM tbl_students INNER JOIN tbl_courses ON courses_longName = students_course ORDER BY students_lname, students_fname, courses_shortName")
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute("SELECT * FROM tbl_students LEFT OUTER JOIN tbl_courses ON courses_longName = students_course ORDER BY students_lname, students_fname, courses_shortName")
         studentList = cursor.fetchall()
-        print(len(studentList))
         for student in studentList:
-            print(student)
             fullname = "{}, {}".format(student[2], student[1])[:24]
             window.lst_list.insert(END, "{:03d} {:25} {}".format(student[0], fullname, student[7]))
 
 def update(window):
-    print("Update is running")
     studentID = window.txt_id.get().strip()
     fname = window.txt_fname.get().strip().title()
     lname = window.txt_lname.get().strip()
@@ -247,12 +248,15 @@ def update(window):
             return
     if course == "":
         confirm = messagebox.askokcancel("No course provided", "You have not provided the current course for the student.\n\nAre you sure you want to continue?")
-        if not confirm:
+        if confirm:
+            course = None
+        else:
             return
 
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("SELECT * FROM tbl_students WHERE students_id = {}".format(studentID))
         studentInfo = cursor.fetchone()
         if fname != studentInfo[1] or lname != studentInfo[2]:
@@ -265,21 +269,42 @@ def update(window):
     clear(window)
     messagebox.showinfo("Students updated", "The student info has been updated in the database.")
     showList(window)
+
+def updateCourseMenu(window, *deleted):
+    stID = window.txt_id.get()
+    fn = window.txt_fname.get()
+    ln = window.txt_lname.get()
+    ph = window.txt_phone.get()
+    em = window.txt_email.get()
+    cc = window.opt_course_var.get()
+    gui.loadGui(window)
+    window.txt_id.insert(0, stID)
+    window.txt_fname.insert(0, fn)
+    window.txt_lname.insert(0, ln)
+    window.txt_phone.insert(0, ph)
+    window.txt_email.insert(0, em)
+    if cc in deleted:
+        window.opt_course_var.set("")
+    else:
+        window.opt_course_var.set(cc)
     
 
-# Function relted to both windows
-def createCoursesWindow(self):
+
+# Function related to both windows
+def createCoursesWindow(window):
+    form ={'id': window.txt_id.get(), 'fn': window.txt_fname.get(), 'ln': window.txt_lname.get(), 'ph': window.txt_phone.get(), 'em': window.txt_email.get(), 'cc': window.opt_course_var.get(), }
     try:
-        self.cw.lift()
+        window.cw.destroy()
     except:
-        self.cw = tk.Toplevel(self)
-        self.cw.title("Courses management")
-        self.cw.config(bg = "#005500")
-        gui.loadCoursesGui(self.cw)
+        pass
+    window.cw = tk.Toplevel(window)
+    window.cw.title("Courses management")
+    window.cw.config(bg = "#005500")
+    gui.loadCoursesGui(window.cw, window)
 
 
 # Functions related to the Courses GUI
-def addCourse(window):
+def addCourse(window, mainWindow):
     shortName = window.txt_shortName.get().strip().upper()
     longName = window.txt_longName.get().strip()
     if shortName == "" or longName == "":
@@ -288,6 +313,7 @@ def addCourse(window):
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("SELECT COUNT(*) FROM tbl_courses WHERE courses_longName LIKE '{}'".format(longName))
         count = cursor.fetchone()[0]
         if count > 0:
@@ -304,32 +330,37 @@ def addCourse(window):
         conn.commit()
     conn.close()
     clearCourses(window)
-    messagebox.showinfo("Sourse Added", "The course been added to the database.")
+    messagebox.showinfo("Course Added", "The course been added to the database.")
     showListCourses(window)
+    updateCourseMenu(mainWindow)
 
 def clearCourses(window):
         window.txt_shortName.delete(0, END)
         window.txt_longName.delete(0, END)
 
-def deleteCourse(window):
+def deleteCourse(window, mainWindow):
     courseShortName = window.txt_shortName.get()
     courseLongName = window.txt_longName.get()
     if courseShortName != "" and courseLongName != "":
         conn = sqlite3.connect('db_students.db')
         with conn:
             cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON;")
             cursor.execute("SELECT COUNT(*) FROM tbl_courses WHERE courses_shortName = '{}' and courses_longName = '{}'".format(courseShortName, courseLongName))
             count = cursor.fetchone()[0]
-            print(count)
             if count == 1:
                 confirm = messagebox.askokcancel("Confirm delete", "The course {} {} will be deleted\n\nDo you wish to continue?".format(courseShortName, courseLongName))
                 if confirm:
-                    cursor.execute("DELETE FROM tbl_courses WHERE courses_shortName = '{}' and courses_longName = '{}'".format(courseShortName, courseLongName))
-                    clearCourses(window)
+                    try:
+                        cursor.execute("DELETE FROM tbl_courses WHERE courses_shortName = '{}' and courses_longName = '{}'".format(courseShortName, courseLongName))
+                        clearCourses(window)
+                    except sqlite3.IntegrityError:
+                        messagebox.showerror("Course in Use", "You cannot delete this course. It is being used for students.")
             elif count == 0:
                 messagebox.showerror("No records found", "No records where found with the details provided. Select a course from the list and click delete.")
         conn.close()
-        showListCourses(window)
+        updateCourseMenu(mainWindow, courseLongName)
+    showListCourses(window)
 
 def selectCourse(window, event):
     w = event.widget
@@ -339,6 +370,7 @@ def selectCourse(window, event):
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("SELECT * FROM tbl_courses WHERE courses_shortName = '{}'".format(courseShortName))
         courseInfo = cursor.fetchone()
     conn.close()
@@ -352,9 +384,9 @@ def showListCourses(window):
     conn = sqlite3.connect("db_students.db")
     with conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute("SELECT * FROM tbl_courses ORDER BY courses_id")
         coursesList = cursor.fetchall()
-        print(len(coursesList))
         for course in coursesList:
             window.lst_courseList.insert(END, "{:6} {}".format(course[1], course[2]))
 

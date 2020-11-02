@@ -53,8 +53,7 @@ def loadGui(window):
     window.opt_course = tk.OptionMenu(window.root, window.opt_course_var, "", *listCourses)
     window.opt_course.grid(row = 11, column = 0, rowspan = 1, columnspan = 3, padx = (20, 0), pady = (5, 0), sticky = W+E)
 
-    print(window.opt_course_var.get())
-
+    
     # Listbox with scrollbar
     window.lbl_list = tk.Label(window.root, text = "Students:", bg = "#005500", fg = "white")
     window.lbl_list.grid(row = 0, column =3, rowspan = 1, columnspan = 1, padx = (20, 0), pady = (10, 0), sticky = W)
@@ -82,7 +81,7 @@ def loadGui(window):
     func.showList(window)
 
 # COURSES WINDOW
-def loadCoursesGui(window):
+def loadCoursesGui(window, mainWindow):
 
     # Labels
     window.lbl_shortName = tk.Label(window, text = "Course Abbreviation:", bg = "#005500", fg = "white")
@@ -104,9 +103,9 @@ def loadCoursesGui(window):
     window.lst_courseList.bind("<<ListboxSelect>>", lambda event: func.selectCourse(window, event))
     
     # Buttons
-    window.btn_add = tk.Button(window, width = 12, height = 2, text = "Add", fg = "#005500", command = lambda: func.addCourse(window))
+    window.btn_add = tk.Button(window, width = 12, height = 2, text = "Add", fg = "#005500", command = lambda: func.addCourse(window, mainWindow))
     window.btn_add.grid(row=4,column=0,padx=(20,0),pady=(20,20),sticky=W)
-    window.btn_delete = tk.Button(window, width = 12, height = 2, text = "Delete", fg = "#005500", command = lambda: func.deleteCourse(window))
+    window.btn_delete = tk.Button(window, width = 12, height = 2, text = "Delete", fg = "#005500", command = lambda: func.deleteCourse(window, mainWindow))
     window.btn_delete.grid(row=4,column=1,padx=(20,0),pady=(20,20),sticky=W)
     
     func.showListCourses(window)
