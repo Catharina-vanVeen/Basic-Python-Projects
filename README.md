@@ -9,7 +9,7 @@
 </ul>
 
 <h3 id="sts">Student Tracking System</h3>
-<p>This project uses the <strong>tkinter</strong> module and the <strong>sqlite relational database</strong>. The project functions as a student tracking system. It saves a student's name, contact details and current course in a database. It allows the user to search, update, create and delete student information. It also allows the user to maintain the course list.</p>
+<p>This project uses the <strong>tkinter</strong> module and the <strong>SQLite relational database</strong>. The project functions as a student tracking system. It saves a student's name, contact details and current course in a database. It allows the user to search, update, create and delete student information. It also allows the user to maintain the course list.</p>
 
 <h3 id="wpg">Web Page Generator</h3>
 <p>This project uses the <strong>tkinter</strong> module. The project provides the user with an interface to create and launch .html files. The user can also browse for an existing file to edit the body.</p>
