@@ -4,7 +4,6 @@
 
 <h2>Projects</h2>
 <ul>
-  <li><a href="#cm">Classical Music</a></li>
   <li><a href="#sts">Student Tracking System</a></li>
   <li><a href="#wpg">Web Page Generator</a></li>
   <li><a href="#fc">File Copier</a></li>
