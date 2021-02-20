@@ -1,5 +1,7 @@
 # Basic Python Projects
 
+<p>For a python -django web app, see separate repository.</p>
+
 <h2>Projects</h2>
 <ul>
   <li><a href="#cm">Classical Music</a></li>
@@ -7,9 +9,6 @@
   <li><a href="#wpg">Web Page Generator</a></li>
   <li><a href="#fc">File Copier</a></li>
 </ul>
-
-<h3 id="cm">Classical Music</h3>
-<p>A <strong>Python</strong> web app to keep track of classical cd's, compositions, and musicians in a relational database. The app utilized <strong>Django</strong>, a <strong>MVT Framework</strong> for full CRUD functionality to a <strong>SQL</strong> database. I used <strong>Bootstrap 4</strong> for the front end. I utilized an API of MusicBrainz.com and web scraping (<strong>Beautiful Soup</strong>) to retrieve information that the user can add to the database. I created a <strong>REST API</strong> to connect to the database.</p>
 
 <h3 id="sts">Student Tracking System</h3>
 <p>This project uses the <strong>tkinter</strong> module and the <strong>SQLite relational database</strong>. The project functions as a student tracking system. It saves a student's name, contact details and current course in a database. It allows the user to search, update, create and delete student information. It also allows the user to maintain the course list.</p>
